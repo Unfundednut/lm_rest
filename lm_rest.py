@@ -1,11 +1,7 @@
-import time
 import os
 import requests
 import json
-import hashlib
-import base64
 import time
-import hmac
 
 def lm_rest(httpVerb, resourcePath, data, queryParams):
     """Used to easily interact with LogicMonitor v3 API
@@ -32,16 +28,15 @@ def lm_rest(httpVerb, resourcePath, data, queryParams):
     if httpVerb in dataverbs and not data:
         raise ValueError("data must not be empty")
     # Get environment variables needed
-    company = os.getenv('LM_COMPANY')
-    access_id = os.getenv('LM_ACCESS_ID')
-    access_key = os.getenv('LM_ACCESS_KEY')
+    lm_subdomain = os.getenv('LM_SUBDOMAIN')
+    lm_bearer_token = os.getenv('LM_BEARER_TOKEN')
+
     # Raise exception if not set
-    if not company:
-        raise ValueError("Environment Variable: LM_COMPANY must be set!")
-    if not access_id:
-        raise ValueError("Environment Variable: LM_ACCESS_ID must be set!")
-    if not access_key:
-        raise ValueError("Environment Variable: LM_ACCESS_KEY must be set!")
+    if not lm_subdomain:
+        raise ValueError("Environment Variable: LM_SUBDOMAIN must be set!")
+    if not lm_bearer_token:
+        raise ValueError("Environment Variable: LM_BEARER_TOKEN must be set!")
+
     # Initialize variables
     count = 0
     done = 0
@@ -55,13 +50,9 @@ def lm_rest(httpVerb, resourcePath, data, queryParams):
         # Use offset to paginate results
         queryParamsPagination = '&offset='+str(count)+'&size=1000'
 
-        url = 'https://' + company + '.logicmonitor.com/santaba/rest' + resourcePath + queryParams + queryParamsPagination
+        url = 'https://' + lm_subdomain + '.logicmonitor.com/santaba/rest' + resourcePath + queryParams + queryParamsPagination
         # Build Authentication Header
-        epoch = str(int(time.time() * 1000))
-        requestVars = httpVerb + epoch + data + resourcePath
-        hmac1 = hmac.new(access_key.encode(), msg=requestVars.encode(), digestmod=hashlib.sha256).hexdigest()
-        signature = base64.b64encode(hmac1.encode())
-        auth = 'LMv1 ' + access_id + ':' + signature.decode() + ':' + epoch
+        auth = f"Bearer {lm_bearer_token}"
         # Build Headers
         headers = {'Content-Type': 'application/json', 'Authorization': auth, 'X-Version': '3'}
         # Make request and check for errors

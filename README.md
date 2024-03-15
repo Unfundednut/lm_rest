@@ -4,13 +4,12 @@ RESTful function for interacting with the LogicMonitor API.
 ## Setup
 Have the following environment variables set.
 ```shell
-LM_COMPANY=
-LM_ACCESS_ID=""
-LM_ACCESS_KEY=""
+LM_SUBDOMAIN=""
+LM_BEARER_TOKEN=""
 ```
 
-1. Set `LM_COMPANY` to the subdomain of your LogicMonitor portal.
-2. Set `LM_ACCESS_ID` and `LM_ACCESS_KEY` to those generated under a user's profile in LogicMonitor.
+1. Set `LM_SUBDOMAIN` to the subdomain of your LogicMonitor portal.
+2. Set `LM_BEARER_TOKEN` to the generated one from LogicMonitor.
 3. Install the required pip module `requests` or simply run a `pip install -r requirements.txt`
 
 ## Examples
