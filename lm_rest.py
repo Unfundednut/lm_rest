@@ -3,7 +3,7 @@ import requests
 import json
 import time
 
-def lm_rest(httpVerb, resourcePath, data, queryParams):
+def lm_rest(httpVerb: str, resourcePath: str, data: dict = None, queryParams: str = None):
     """Used to easily interact with LogicMonitor v3 API
 
     Args:
@@ -12,21 +12,25 @@ def lm_rest(httpVerb, resourcePath, data, queryParams):
         data (str): json formatted string for PUT, POST or PATCH
         queryParams (str): filter and field parameters
 
-
     Returns:
         list: For multiple devices/groups return
         dict: For single device/group return
-    """    
+    """
+
     # Which HTTP Methods are allowed
     validverbs = {'GET', 'PUT', 'POST', 'PATCH', 'DELETE'}
+
     # Which HTTP Methods require the data variable
     dataverbs = {'PUT', 'POST', 'PATCH'}
+
     # IF the HTTP Method supplied isn't in the list of allowed
     if httpVerb not in validverbs:
         raise ValueError("httpVerb must be one of %r." % validverbs)
+    
     # If the data variable is not set and is required
     if httpVerb in dataverbs and not data:
         raise ValueError("data must not be empty")
+
     # Get environment variables needed
     lm_subdomain = os.getenv('LM_SUBDOMAIN')
     lm_bearer_token = os.getenv('LM_BEARER_TOKEN')
@@ -36,6 +40,9 @@ def lm_rest(httpVerb, resourcePath, data, queryParams):
         raise ValueError("Environment Variable: LM_SUBDOMAIN must be set!")
     if not lm_bearer_token:
         raise ValueError("Environment Variable: LM_BEARER_TOKEN must be set!")
+    
+    # Build Headers
+    headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {lm_bearer_token}', 'X-Version': '3'}
 
     # Initialize variables
     count = 0
@@ -43,50 +50,53 @@ def lm_rest(httpVerb, resourcePath, data, queryParams):
     allitems = []
 
     # If queryParams isn't initilized or initilized properly add ? in front
-    if not queryParams.startswith("?"):
+    if queryParams is not None and not queryParams.startswith("?"):
         queryParams = "?" + queryParams
+    elif queryParams is None:
+        queryParams = "?"
+    
     while done == 0:
-        data = str(data)
+        # Convery the dict to a str
+        data = json.dumps(data)
         # Use offset to paginate results
         queryParamsPagination = '&offset='+str(count)+'&size=1000'
 
-        url = 'https://' + lm_subdomain + '.logicmonitor.com/santaba/rest' + resourcePath + queryParams + queryParamsPagination
-        # Build Authentication Header
-        auth = f"Bearer {lm_bearer_token}"
-        # Build Headers
-        headers = {'Content-Type': 'application/json', 'Authorization': auth, 'X-Version': '3'}
         # Make request and check for errors
         if httpVerb == 'PUT':
             try:
+                url = 'https://' + lm_subdomain + '.logicmonitor.com/santaba/rest' + resourcePath + queryParams
                 response = requests.put(url, data=data, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
                 raise SystemExit(err)
         elif httpVerb == 'POST':
             try:
+                url = 'https://' + lm_subdomain + '.logicmonitor.com/santaba/rest' + resourcePath + queryParams
                 response = requests.post(url, data=data, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
                 raise SystemExit(err)
         elif httpVerb == 'PATCH':
             try:
+                url = 'https://' + lm_subdomain + '.logicmonitor.com/santaba/rest' + resourcePath + queryParams
                 response = requests.patch(url, data=data, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
                 raise SystemExit(err)
         elif httpVerb == 'DELETE':
             try:
+                url = 'https://' + lm_subdomain + '.logicmonitor.com/santaba/rest' + resourcePath
                 response = requests.delete(url, data=data, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
                 raise SystemExit(err)
         else:
             try:
+                url = 'https://' + lm_subdomain + '.logicmonitor.com/santaba/rest' + resourcePath + queryParams + queryParamsPagination
                 response = requests.get(url, data=data, headers=headers)
                 response.raise_for_status()
             except requests.exceptions.HTTPError as err:
                 raise SystemExit(err)
-
 
         if httpVerb != 'GET':
             parsed = json.loads(response.content)
