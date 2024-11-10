@@ -362,14 +362,14 @@ class lm_rest:
 
 
     # POST Calls
-    ## Create Access Group Mapping
+    ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
     def post_access_groups_mapping(self, moduletype: str, moduleid: int, accessgroups: list = [1]):
         path = f'{self.base_url}/setting/accessgroup/mapunmap/modules'
         payload = {"mappingDetails": [{"accessgroups": self.__listints(accessgroups),"moduletype": moduletype,"moduleid": int(moduleid)}]}
         lmAccessGroupMappings = self.__queryPost(queryPath=path,queryData=payload,queryParams=None)
         return lmAccessGroupMappings
         
-    ## Raw Request
+    ## Raw Request - Currently old function
     def rest_raw(self, httpVerb: str, resourcePath: str, data: dict = None, queryParams: str = None):
         """Used to easily interact with LogicMonitor v3 API
 
