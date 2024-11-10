@@ -409,6 +409,13 @@ class lm_rest:
         lmDeviceGroupSDTs = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupSDTs
 
+    def get_device_group_alerts(self, id, fields: list =['resourceId','endEpoch','threshold','type','startEpoch','internalId','monitorObjectName','dataPointName','dataPointId','tenant','alertValue','SDT','instanceName','severity'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups/{str(id)}/alerts'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroupAlerts = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroupAlerts
+
     # POST Calls
     ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
     def post_access_groups_mapping(self, moduletype: str, moduleid: int, accessgroups: list = [1]):
