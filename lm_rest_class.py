@@ -360,6 +360,54 @@ class lm_rest:
         lmDatasource = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDatasource
 
+    def get_device_groups(self, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroups = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroups
+
+    def get_device_group(self, id, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups','customProperties'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups/{str(id)}'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroup = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroup
+
+    def get_device_group_properties(self, id, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups/{str(id)}/properties'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroupProperties = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroupProperties
+
+    def get_device_group_property(self, id, fieldname, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups/{str(id)}/properties/{fieldname}'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroupProperty = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroupProperty
+
+    def get_device_group_datasources(self, id, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups/{str(id)}/datasources'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroupDatasources = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroupDatasources
+
+    def get_device_group_datasource(self, id, dsid, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups/{str(id)}/datasources/{str(dsid)}'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroupDatasource = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroupDatasource
+
+    def get_device_group_sdts(self, id, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/groups/{str(id)}/historysdts'
+        sizeLimit = 1000
+        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
+        lmDeviceGroupSDTs = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceGroupSDTs
 
     # POST Calls
     ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
