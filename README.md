@@ -2,44 +2,44 @@
 RESTful function for interacting with the LogicMonitor API.
 
 ## Setup
-Have the following environment variables set.
-```shell
-LM_SUBDOMAIN=""
-LM_BEARER_TOKEN=""
+Import the class and initlize it
+```python
+from lm_rest_class import lm_rest
+import os
+lm_cred_info = {
+    'subdomain': os.getenv('PORTAL'),
+    'bearer': os.getenv('BEARER')
+}
+lm_rest = lm_rest(lm_info=lm_cred_info)
 ```
 
-1. Set `LM_SUBDOMAIN` to the subdomain of your LogicMonitor portal.
-2. Set `LM_BEARER_TOKEN` to the generated one from LogicMonitor.
-3. Install the required pip module `requests` or simply run a `pip install -r requirements.txt`
+1. Set `PORTAL` to the subdomain of your LogicMonitor portal.
+2. Set `BEARER` to the generated bearer token from the LogicMonitor portal.
+3. Install the required pip module `requests`.
 
-## Examples
-### Get resources in a folder
+## Example Usage
+### Get 1 User
 
 ```python
-resources = lm_rest('GET', '/device/groups/27770/devices', '', '?fields=name,id')
-for resource in resources:
-    resource_name = resource['name']
-    resource_id = resource['id']
-    # Do more stuff
+tst_lm_users = lm_rest.get_users(maxsize=1)
+print(json.dumps(tst_lm_users, indent=4))
 ```
-
-### Update a property on a resource
-
-```python
-deviceid = "5653"
-lm_rest_path = '/device/devices/' + deviceid
-lm_rest_data = '{"customProperties":[{"name":"testprop","value":"Prod"}]}'
-lm_rest_queryparams = '?patchFields=customProperties&opType=replace'
-lm_result = lm_rest('PATCH', lm_rest_path, lm_rest_data, lm_rest_queryparams)
+Results in:
+```json
+[
+    {
+        "id": 34,
+        "email": "johndoe@example.com",
+        "username": "johndoe"
+    }
+]
 ```
 
 ### Chain Results
 ```python
-devices = lm_rest('GET', '/device/groups/27680/devices', '', '?fields=name,id')
-for device in devices:
-    lm_rest_path = '/device/devices/' + str(device['id'])
-    lm_rest_data = '{"customProperties":[{"name":"testprop","value":"Prod"}]}'
-    lm_rest_queryparams = '?patchFields=customProperties&opType=replace'
-    lm_result = lm_rest('PATCH', lm_rest_path, lm_rest_data, lm_rest_queryparams)
-    print(json.dumps(lm_result, indent=4))
+network_team_accessgroup = lm_rest.get_access_groups(filter='name:"Network Team"')[0]['id']
+network_datasources = lm_rest.get_datasources(filter='name~"Network_"')
+for datasource in network_datasources:
+    print(f"Updating {datasource['name']}")
+    lm_rest.post_access_groups_mapping(moduletype="DATASOURCE",moduleid=datasource['id'],accessgroups=[network_team_accessgroup,1])
 ```
