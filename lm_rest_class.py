@@ -360,6 +360,7 @@ class lm_rest:
         lmDatasource = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDatasource
 
+    ## Get Device Groups
     def get_device_groups(self, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups'
         sizeLimit = 1000
@@ -367,6 +368,7 @@ class lm_rest:
         lmDeviceGroups = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroups
 
+    ## Get Device Group
     def get_device_group(self, id, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups','customProperties'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}'
         sizeLimit = 1000
@@ -374,6 +376,7 @@ class lm_rest:
         lmDeviceGroup = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroup
 
+    ## Get Device Group Properties
     def get_device_group_properties(self, id, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/properties'
         sizeLimit = 1000
@@ -381,6 +384,7 @@ class lm_rest:
         lmDeviceGroupProperties = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupProperties
 
+    ## Get Device Group Property
     def get_device_group_property(self, id, fieldname, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/properties/{fieldname}'
         sizeLimit = 1000
@@ -388,6 +392,7 @@ class lm_rest:
         lmDeviceGroupProperty = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupProperty
 
+    ## Get Device Group Datasources
     def get_device_group_datasources(self, id, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/datasources'
         sizeLimit = 1000
@@ -395,6 +400,7 @@ class lm_rest:
         lmDeviceGroupDatasources = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupDatasources
 
+    ## Get Device Group Datasource
     def get_device_group_datasource(self, id, dsid, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/datasources/{str(dsid)}'
         sizeLimit = 1000
@@ -402,6 +408,7 @@ class lm_rest:
         lmDeviceGroupDatasource = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupDatasource
 
+    ## GET Device Group SDTs
     def get_device_group_sdts(self, id, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/historysdts'
         sizeLimit = 1000
@@ -409,6 +416,7 @@ class lm_rest:
         lmDeviceGroupSDTs = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupSDTs
 
+    ## Get Device Group Alerts
     def get_device_group_alerts(self, id, fields: list =['resourceId','endEpoch','threshold','type','startEpoch','internalId','monitorObjectName','dataPointName','dataPointId','tenant','alertValue','SDT','instanceName','severity'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/alerts'
         sizeLimit = 1000
