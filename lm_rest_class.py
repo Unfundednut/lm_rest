@@ -136,292 +136,256 @@ class lm_rest:
     def get_users(self, fields: list = ['id','username','email'], filter: str = None, maxsize: int = None):
         path = f'{self.base_url}/setting/admins'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
-        lmUsers = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmUsers = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmUsers
 
     ## Get User Account
     def get_user(self, id, fields: list = ['id','username','email'], filter: str = None):
         path = f'{self.base_url}/setting/admins/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
-        lmUser = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=None)
+        lmUser = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=None)
         return lmUser
 
     ## Get Alert Rules
     def get_alert_rules(self, fields: list = ['id','name','priority','levelStr','escalationChainId'], filter: str = None, maxsize: int = None):
         path = f'{self.base_url}/setting/alert/rules'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
-        lmAlertRules = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmAlertRules = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmAlertRules
 
     ## Get Alert Rule
     def get_alert_rule(self, id, fields: list = ['id','name','priority','levelStr','escalationChainId'], filter: str = None):
         path = f'{self.base_url}/setting/alert/rules/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
-        lmAlertRule = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=None)
+        lmAlertRule = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=None)
         return lmAlertRule
 
     ## Get Alerts
     def get_alerts(self, fields: list = ['id','resourceId','instanceName','type','internalId','tenant','monitorObjectName','startEpoch','severity','tenant'], filter: str = None, maxsize: int = None):
         path = f'{self.base_url}/alert/alerts'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
-        lmAlerts = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmAlerts = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmAlerts
     
     ## Get Alert
     def get_alert(self, id, fields: list = ['resourceId','instanceName','type','internalId','tenant','monitorObjectName','startEpoch','severity','tenant'], filter: str = None):
         path = f'{self.base_url}/alert/alerts/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
-        lmAlert = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=None)
+        lmAlert = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=None)
         return lmAlert
 
     ## Get Alert Stats
     def get_alert_stats(self):
         path = f'{self.base_url}/alert/stat'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=[],queryFilter=None)
-        lmAlertStats = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=None)
+        lmAlertStats = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=[],queryFilter=None),sizeLimit=sizeLimit,maxSize=None)
         return lmAlertStats
 
     ## Get API Tokens
     def get_api_tokens(self, fields: list = ['id','adminId','status','lastUsedOn','accessId','adminName'], filter: str = None, type: str = None, maxsize = None):
         path = f'{self.base_url}/setting/admins/apitokens'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
         if type is not None and type.lower() == 'bearer':
             queryParams = queryParams + '&type=bearer'
-        lmApiTokens = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmApiTokens = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmApiTokens
 
     ## Get User's API Tokens
     def get_api_user_tokens(self, id, fields: list = ['id','adminId','status','lastUsedOn','accessId','adminName'], filter: str = None, type: str = None, maxsize = None):
         path = f'{self.base_url}/setting/admins/{str(id)}/apitokens'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields, queryFilter=filter)
         if type is not None and type.lower() == 'bearer':
             queryParams = queryParams + '&type=bearer'
-        lmApiTokens = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit, maxSize=maxsize)
+        lmApiTokens = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit, maxSize=maxsize)
         return lmApiTokens
 
     ## Get AppliesTo Functions
     def get_appliesto_functions(self, fields: list = ['id','code','description','name'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/functions'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=None)
-        lmAppliesToFunctions = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit, maxSize=maxsize)
+        lmAppliesToFunctions = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=None),sizeLimit=sizeLimit, maxSize=maxsize)
         return lmAppliesToFunctions
 
     ## Get AppliesTo Function
     def get_appliesto_function(self, id, fields: list = ['id','code','description','name'], filter: str = None):
         path = f'{self.base_url}/setting/functions/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=None)
-        lmAppliesToFunction = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=None)
+        lmAppliesToFunction = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=None),sizeLimit=sizeLimit,maxSize=None)
         return lmAppliesToFunction
     
     ## Get ApiPerfStats
     def get_api_perf_status(self):
         path = f'{self.base_url}/apiStats/externalApis'
         sizeLimit = 1
-        queryParams = self.__queryParams(queryFields=None,queryFilter=None)
-        lmApiPerfStats = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=None)
+        lmApiPerfStats = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=None,queryFilter=None),sizeLimit=sizeLimit,maxSize=None)
         return lmApiPerfStats
     
     ## Get Audit Logs
     def get_audit_logs(self, format: str = 'json', fields: list = [], filter: str = None, maxsize=None):
         path = f'{self.base_url}/setting/accesslogs'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmAuditLogs = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmAuditLogs = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmAuditLogs
 
     ## Get Collector Groups
     def get_collector_groups(self, fields: list = ['id','name','numOfCollectors'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/collector/groups'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmCollectorGroups = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmCollectorGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmCollectorGroups
 
     ## Get Collector Group
     def get_collector_group(self, id, fields: list = [], filter: str = None):
         path = f'{self.base_url}/setting/collector/groups/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmCollectorGroups = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=None)
+        lmCollectorGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=None)
         return lmCollectorGroups
 
     ## Get Collectors
     def get_collectors(self, fields: list = ['customProperties','ea','arch','collectorSize','isLmlogsSyslogEnabled','collectorGroupName','collectorGroupId','numberOfHosts','numberOfInstances','hostname','platform','id'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/collector/collectors'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmCollectors = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmCollectors = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmCollectors
 
     ## Get Collector
     def get_collector(self, id, fields: list = ['customProperties','ea','arch','collectorSize','isLmlogsSyslogEnabled','collectorGroupName','collectorGroupId','numberOfHosts','numberOfInstances','hostname','platform','id'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/collector/collectors/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmCollector = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmCollector = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmCollector
 
     ## Get Collector Versions
     def get_collector_versions(self, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/collector/collectors/versions'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmCollectorVersions = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmCollectorVersions = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmCollectorVersions
 
     ## Get Access Groups
     def get_access_groups(self, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/accessgroup'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmAccessGroups = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmAccessGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmAccessGroups
 
     ## Get Access Group
     def get_access_group(self, id, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/accessgroup/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmAccessGroup = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmAccessGroup = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmAccessGroup
 
     ## Get Config Sources
     def get_config_sources(self, fields: list = ['id','name','displayName'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/configsources'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmConfigSources = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmConfigSources = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmConfigSources
 
     ## Get Config Source
     def get_config_source(self, id, fields: list = ['id','name','displayName'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/configsources/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmConfigSource = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmConfigSource = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmConfigSource
 
     ## Get Dashboard Groups
     def get_dashboard_groups(self, fields: list = ['id','name','numOfDashboards','numOfDirectDashboards','numOfDirectSubGroups','parentId'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/dashboard/groups'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDashboardGroups = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDashboardGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDashboardGroups
 
     ## Get Dashboard Group
     def get_dashboard_group(self, id, fields: list = ['id','name','numOfDashboards','numOfDirectDashboards','numOfDirectSubGroups','parentId'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/dashboard/groups/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDashboardGroup = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDashboardGroup = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDashboardGroup
 
     ## Get Dashboards
     def get_dashboards(self, fields: list = ['id','fullName','groupFullPath','groupId','groupName','name'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/dashboard/dashboards'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDashboards = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDashboards = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDashboards
 
     ## Get Dashboard
     def get_dashboard(self, id, fields: list = ['id','fullName','groupFullPath','groupId','groupName','name'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/dashboard/dashboards/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDashboard = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDashboard = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDashboard
     
     ## Get Datasources
     def get_datasources(self, fields: list = ['id','collectInterval','collectMethod','description','displayName','hasMultiInstances','name','tags'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/datasources'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDatasources = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDatasources = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDatasources
 
     ## Get Datasource
     def get_datasource(self, id, fields: list = ['id','collectInterval','collectMethod','description','displayName','hasMultiInstances','name','tags'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/datasources/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDatasource = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDatasource = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDatasource
 
     ## Get Device Groups
     def get_device_groups(self, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroups = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroups
 
     ## Get Device Group
     def get_device_group(self, id, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups','customProperties'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroup = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroup = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroup
 
     ## Get Device Group Properties
     def get_device_group_properties(self, id, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/properties'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroupProperties = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroupProperties = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupProperties
 
     ## Get Device Group Property
     def get_device_group_property(self, id, fieldname, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/properties/{fieldname}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroupProperty = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroupProperty = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupProperty
 
     ## Get Device Group Datasources
     def get_device_group_datasources(self, id, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/datasources'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroupDatasources = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroupDatasources = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupDatasources
 
     ## Get Device Group Datasource
     def get_device_group_datasource(self, id, dsid, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/datasources/{str(dsid)}'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroupDatasource = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroupDatasource = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupDatasource
 
     ## GET Device Group SDTs
     def get_device_group_sdts(self, id, fields: list =[], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/historysdts'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroupSDTs = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroupSDTs = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupSDTs
 
     ## Get Device Group Alerts
     def get_device_group_alerts(self, id, fields: list =['resourceId','endEpoch','threshold','type','startEpoch','internalId','monitorObjectName','dataPointName','dataPointId','tenant','alertValue','SDT','instanceName','severity'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/alerts'
         sizeLimit = 1000
-        queryParams = self.__queryParams(queryFields=fields,queryFilter=filter)
-        lmDeviceGroupAlerts = self.__queryGet(queryPath=path,queryParams=queryParams,sizeLimit=sizeLimit,maxSize=maxsize)
+        lmDeviceGroupAlerts = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupAlerts
 
     # POST Calls
