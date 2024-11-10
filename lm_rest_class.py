@@ -59,7 +59,7 @@ class lm_rest:
             queryParams = ""
         return queryParams
 
-    ## Handle lists of numbers to verify they are ints and not strs
+    ## Handle lists of numbers to verify they are numbers and not letters
     def __listints(self, list):
         returnList = []
         for item in list:
@@ -114,7 +114,7 @@ class lm_rest:
             queryURL = f'{queryPath}{queryParams}'
         else:
             queryURL = queryPath
-        queryResponse = self.session.post(url=queryPath,json=queryData)
+        queryResponse = self.session.post(url=queryURL,json=queryData)
         queryResponseItems = queryResponse.json()
         return queryResponseItems
 
@@ -361,7 +361,8 @@ class lm_rest:
         return lmDatasource
 
 
-    # POST Area
+    # POST Calls
+    ## Create Access Group Mapping
     def post_access_groups_mapping(self, moduletype: str, moduleid: int, accessgroups: list = [1]):
         path = f'{self.base_url}/setting/accessgroup/mapunmap/modules'
         payload = {"mappingDetails": [{"accessgroups": self.__listints(accessgroups),"moduletype": moduletype,"moduleid": int(moduleid)}]}
