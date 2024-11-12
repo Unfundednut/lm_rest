@@ -127,36 +127,30 @@ class LogicMonitorREST:
         def __init__(self,lm_rest):
             self.lm_rest = lm_rest
 
-        def create_client(self,companyid: str,services: list = ['managedservices'], dashboard_parent_id: int = None, base_resource_path: str = None, resource_parent_id: int = None, company_sysid: str = None, cloud_aws_parent_id: int = None, cloud_azure_parent_id: int = None):
+        def create_client(self,companyid: str,services: list = ['managedservices'], dashboard_parent_id: int = None, base_resource_path: str = None, resource_parent_id: int = None, company_sysid: str = None, cloud_parent_id: int = None):
             companyid = companyid.upper()
-            print(f"Creating {companyid} | {self.lm_rest.base_url}")
             # Create Reports Folder
-            client_report_folder = lm_rest.post_report_folder(self.lm_rest,foldername=companyid)['id']
+            client_report_folder = self.lm_rest.post_report_folder(self.lm_rest,foldername=companyid)['id']
             # Create Dashboards Folder
             dashboard_payload = {"parentId": int(dashboard_parent_id), "name": companyid, "widgetTokens": [{"inheritList": [],"name": "CompanyName","type": "owned","value": companyid},{"inherit_list": [],"name": "defaultResourceGroup","type": "owned","value": f'{base_resource_path}/{companyid}'}]}
-            client_dashboard_group = lm_rest.post_dashboard_group(self.lm_rest,payload=dashboard_payload)['id']
+            client_dashboard_group = self.lm_rest.post_dashboard_group(self.lm_rest,payload=dashboard_payload)['id']
             # Create Collector Group
             collector_group_payload = {"name": companyid,"customProperties": [{"name": "servicenow.companyid","value": companyid}]}
-            client_collector_group = lm_rest.post_collector_group(self.lm_rest,payload=collector_group_payload)
+            client_collector_group = self.lm_rest.post_collector_group(self.lm_rest,payload=collector_group_payload)
             # Create Client MS Folder
             if 'managedservices' in services:
                 ms_client_payload = {"parentId": resource_parent_id, "name": companyid, "customProperties": [{"name": "servicenow.companyid", "value": companyid}, {"name": "servicenow.company_sys_id", "value": company_sysid}, {"name": "servicenow.instance", "value": "QA"}]}
-                ms_client_folder = lm_rest.post_device_group(self.lm_rest,payload=ms_client_payload)['id']
+                ms_client_folder = self.lm_rest.post_device_group(self.lm_rest,payload=ms_client_payload)['id']
             else:
                 ms_client_folder = None
-            # Create Client AWS Folder
-            if 'cloudaws' in services:
-                ms_cloudaws_payload = {"parentId": cloud_aws_parent_id, "name": companyid, "customProperties": [{"name": "servicenow.companyid", "value": companyid}, {"name": "servicenow.company_sys_id", "value": company_sysid}, {"name": "servicenow.instance", "value": "QA"}]}
-                ms_cloudaws_folder = lm_rest.post_device_group(self.lm_rest,payload=ms_cloudaws_payload)['id']
+            # Create Client Cloud
+            if 'cloud' in services:
+                ms_cloud_payload = {"parentId": cloud_parent_id, "name": companyid, "customProperties": [{"name": "servicenow.companyid", "value": companyid}, {"name": "servicenow.company_sys_id", "value": company_sysid}, {"name": "servicenow.instance", "value": "QA"}]}
+                ms_cloud_folder = self.lm_rest.post_device_group(self.lm_rest,payload=ms_cloud_payload)['id']
             else:
-                ms_cloudaws_folder = None
-            # Create Client Azure Folder
-            if 'cloudazure' in services:
-                ms_cloudazure_payload = {"parentId": cloud_azure_parent_id, "name": companyid, "customProperties": [{"name": "servicenow.companyid", "value": companyid}, {"name": "servicenow.company_sys_id", "value": company_sysid}, {"name": "servicenow.instance", "value": "QA"}]}
-                ms_cloudazure_folder = lm_rest.post_device_group(self.lm_rest,payload=ms_cloudazure_payload)['id']
-            else:
-                ms_cloudazure_folder = None
-            return {'companyid': companyid, 'services': services, 'report_folder': client_report_folder, 'dashboard_group': client_dashboard_group, 'ms_client_folder': ms_client_folder, 'ms_cloudaws_folder': ms_cloudaws_folder, 'ms_cloudazure_folder': ms_cloudazure_folder}
+                ms_cloud_folder = None
+
+            return {'companyid': companyid, 'services': services, 'report_folder': client_report_folder, 'dashboard_group': client_dashboard_group, 'ms_client_folder': ms_client_folder, 'ms_cloud_folder': ms_cloud_folder}
         
         def create_client_role(self,companyid: str, devicegroupid: int = None, awsgroupid: int = None, azuregroupid: int = None, clientdashboardgroupid: int = None, curatedashboardgroupid: int = None, rolegroupid: int = None, clientreportfolderid: int = None):
             base_privileges = [
@@ -247,7 +241,7 @@ class LogicMonitorREST:
                 "roleGroupId": rolegroupid,
                 "twoFARequired": False
             }
-            client_role = lm_rest.post_user_role(self.lm_rest,payload=client_payload)
+            client_role = self.lm_rest.post_user_role(self.lm_rest,payload=client_payload)
             return client_role
 
     # Get Calls
