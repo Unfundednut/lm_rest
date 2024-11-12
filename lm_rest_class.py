@@ -23,7 +23,6 @@ class LogicMonitorREST:
         if testCreds is not True:
             raise ValueError(testCreds)
 
-        self.workflows = self.Workflows(self)
 
     def __str__(self):
         return f'lm_rest initlized for portal {self.subdomain}'
