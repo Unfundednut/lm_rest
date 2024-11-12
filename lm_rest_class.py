@@ -374,6 +374,20 @@ class LogicMonitorREST:
         lmDeviceGroupAlerts = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupAlerts
 
+    ## Get Report Groups
+    def get_report_groups(self, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/report/groups'
+        sizeLimit = 1000
+        lmReportGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmReportGroups
+
+    ## Get User Roles
+    def get_user_roles(self, fields: list =['id','name','roleGroupId','associatedUserCount'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/roles'
+        sizeLimit = 1000
+        lmUserRoles = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmUserRoles
+
     # POST Calls
     ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
     def post_access_groups_mapping(self, moduletype: str, moduleid: int, accessgroups: list = [1]):
