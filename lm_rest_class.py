@@ -2,7 +2,7 @@ import requests
 import time
 import json
 
-class lm_rest:
+class LogicMonitorREST:
     """lm_rest class
         Initilize: lm_rest = lm_rest(lm_info={'subdomain': 'acmecorp', 'bearer': 'lmb_ANABDJAJD'})
         Example Call: lm_users = lm_rest.get_users()
