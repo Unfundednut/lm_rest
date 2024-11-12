@@ -397,7 +397,7 @@ class LogicMonitorREST:
         return lmAccessGroupMappings
 
     ## Create Report Folder
-    def post_report_folder(self,foldername: str):
+    def post_report_group(self,foldername: str):
         path = f'{self.base_url}/report/groups'
         payload = {"name": foldername}
         lmReportFolder = self.__queryPost(queryPath=path,queryData=payload,queryParams=None)
