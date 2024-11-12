@@ -1,24 +1,24 @@
 import requests
 import time
 import json
-
+from typing import List, Dict, Union, Optional, Any
 class LogicMonitorREST:
     """lm_rest class
         Initilize: lm_rest = lm_rest(lm_info={'subdomain': 'acmecorp', 'bearer': 'lmb_ANABDJAJD'})
         Example Call: lm_users = lm_rest.get_users()
     """
 
-    def __init__(self, lm_info: dict):
-        self.subdomain = lm_info['subdomain']
-        self.bearer = lm_info['bearer'].replace('Bearer ','')
-        self.base_url = f'https://{self.subdomain}.logicmonitor.com/santaba/rest'
-        self.headers = {'Content-Type': 'application/json', 'Authorization': f'Bearer {self.bearer}', 'X-Version': '3'}
-        self.session = requests.Session()
+    def __init__(self, lm_info: Dict[str, str]) -> None:
+        self.subdomain: str = lm_info['subdomain']
+        self.bearer: str = lm_info['bearer'].replace('Bearer ','')
+        self.base_url: str = f'https://{self.subdomain}.logicmonitor.com/santaba/rest'
+        self.headers: Dict[str, str] = {'Content-Type': 'application/json', 'Authorization': f'Bearer {self.bearer}', 'X-Version': '3'}
+        self.session: requests.Session = requests.Session()
         self.session.headers.update(self.headers)
         # Number of remaining api calls to trigger sleep
-        self.apiLimitBackoff = 5
+        self.apiLimitBackoff: int = 5
         # TODO: Build in retries
-        self.retries = 5
+        self.retries: int = 5
         testCreds = self.__testAccess()
         if testCreds is not True:
             raise ValueError(testCreds)
@@ -672,4 +672,10 @@ class LogicMonitorREST:
                         time.sleep(int(returned_headers['x-rate-limit-window']))
 
         return lm_return
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.session.close()
 
