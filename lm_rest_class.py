@@ -116,6 +116,18 @@ class LogicMonitorREST:
         queryResponse = self.session.post(url=queryURL,json=queryData)
         queryResponseItems = queryResponse.json()
         return queryResponseItems
+    
+    ## Generic patch for all future patches
+    def __queryPatch(self, queryPath, queryData, queryParams):
+        if queryParams is not None:
+            if not queryParams.startswith('?'):
+                queryParams = f'?{queryParams}'
+            queryURL = f'{queryPath}{queryParams}'
+        else:
+            queryURL = queryPath
+        queryResponse = self.session.patch(url=queryURL,json=queryData)
+        queryResponseItems = queryResponse.json()
+        return queryResponseItems
 
     # Get Calls
     ## Get User Accounts
@@ -387,6 +399,13 @@ class LogicMonitorREST:
         sizeLimit = 1000
         lmUserRoles = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmUserRoles
+    
+    ## Get User Role
+    def get_user_role(self, id, fields: list =['id','name','roleGroupId','associatedUserCount'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/roles/{str(id)}'
+        sizeLimit = 1000
+        lmUserRole = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmUserRole
 
     # POST Calls
     ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
@@ -425,6 +444,13 @@ class LogicMonitorREST:
     def post_user_role(self,payload: dict):
         path = f'{self.base_url}/setting/roles'
         lmUserRole = self.__queryPost(queryPath=path,queryData=payload,queryParams=None)
+        return lmUserRole
+    
+    # Patch Calls
+    ## Update User Role
+    def patch_user_role(self,id,payload: dict):
+        path = f'{self.base_url}/setting/roles/{str(id)}'
+        lmUserRole = self.__queryPatch(queryPath=path,queryData=payload,queryParams=None)
         return lmUserRole
 
     ## Raw Request - Currently old function
