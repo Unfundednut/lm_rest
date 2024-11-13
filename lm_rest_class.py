@@ -406,6 +406,20 @@ class LogicMonitorREST:
         sizeLimit = 1000
         lmUserRole = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmUserRole
+    
+    ## Get User Role Groups
+    def get_user_role_groups(self, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/role/groups'
+        sizeLimit = 1000
+        lmUserRoleGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmUserRoleGroups
+    
+    ## Get User Role Group
+    def get_user_role_group(self, id, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/role/groups/{str(id)}'
+        sizeLimit = 1000
+        lmUserRoleGroup = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmUserRoleGroup
 
     # POST Calls
     ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
