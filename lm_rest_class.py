@@ -236,8 +236,8 @@ class LogicMonitorREST:
     def get_collector_group(self, id, fields: list = [], filter: str = None):
         path = f'{self.base_url}/setting/collector/groups/{str(id)}'
         sizeLimit = 1000
-        lmCollectorGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=None)
-        return lmCollectorGroups
+        lmCollectorGroup = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=None)
+        return lmCollectorGroup
 
     ## Get Collectors
     def get_collectors(self, fields: list = ['customProperties','ea','arch','collectorSize','isLmlogsSyslogEnabled','collectorGroupName','collectorGroupId','numberOfHosts','numberOfInstances','hostname','platform','id'], filter: str = None, maxsize = None):
