@@ -129,6 +129,18 @@ class LogicMonitorREST:
         queryResponseItems = queryResponse.json()
         return queryResponseItems
 
+    ## Generic delete for all future deletes
+    def __queryDelete(self, queryPath, queryParams):
+        if queryParams is not None:
+            if not queryParams.startswith('?'):
+                queryParams = f'?{queryParams}'
+            queryURL = f'{queryPath}{queryParams}'
+        else:
+            queryURL = queryPath
+        queryResponse = self.session.delete(url=queryURL)
+        queryResponseItems = queryResponse.json()
+        return queryResponseItems
+
     # Get Calls
     ## Get User Accounts
     def get_users(self, fields: list = ['id','username','email'], filter: str = None, maxsize: int = None):
@@ -435,6 +447,27 @@ class LogicMonitorREST:
         lmUserRoleGroup = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmUserRoleGroup
 
+    ## Get Netscans
+    def get_netscans(self, fields: list =['collector','defaultGroup','id','method','name','group'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/netscans'
+        sizeLimit = 1000
+        lmNetscans = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmNetscans
+    
+    ## Get Netscan
+    def get_netscan(self, id, fields: list =['collector','defaultGroup','id','method','name','group'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/netscans/{str(id)}'
+        sizeLimit = 1000
+        lmNetscan = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmNetscan
+    
+    ## Get Netscan Groups
+    def get_netscan_groups(self, fields: list =[], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/netscans/groups'
+        sizeLimit = 1000
+        lmNetscanGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmNetscanGroups
+
     # POST Calls
     ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
     def post_access_groups_mapping(self, moduletype: str, moduleid: int, accessgroups: list = [1]):
@@ -486,6 +519,19 @@ class LogicMonitorREST:
         path = f'{self.base_url}/device/groups/{str(id)}'
         lmDeviceGroup = self.__queryPatch(queryPath=path,queryData=payload,queryParams=None)
         return lmDeviceGroup
+
+    # Delete Calls
+    ## Delete Netscan
+    def delete_netscan(self, id):
+        path = f'{self.base_url}/setting/netscans/{str(id)}'
+        lmNetscan = self.__queryDelete(queryPath=path,queryParams=None)
+        return lmNetscan
+    
+    ## Delete Netscan Group
+    def delete_netscan_group(self, id):
+        path = f'{self.base_url}/setting/netscans/groups/{str(id)}'
+        lmNetscanGroup = self.__queryDelete(queryPath=path,queryParams=None)
+        return lmNetscanGroup
 
     ## Raw Request - Currently old function
     def rest_raw(self, httpVerb: str, resourcePath: str, data: dict = None, queryParams: str = None):
@@ -619,4 +665,3 @@ class LogicMonitorREST:
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.session.close()
-
