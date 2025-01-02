@@ -330,6 +330,20 @@ class LogicMonitorREST:
         lmDatasource = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDatasource
 
+    ## Get Devices
+    def get_devices(self, fields: list =['id','customProperties','displayName','hostStatus','inheritedProperties','name','systemProperties'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/devices'
+        sizeLimit = 1000
+        lmDevices = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDevices
+    
+    ## Get Device
+    def get_device(self, id, fields: list =['id','customProperties','displayName','hostStatus','inheritedProperties','name','systemProperties'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/devices/{str(id)}'
+        sizeLimit = 1000
+        lmDevice = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDevice
+    
     ## Get Device Groups
     def get_device_groups(self, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups'
@@ -466,6 +480,12 @@ class LogicMonitorREST:
         path = f'{self.base_url}/setting/roles/{str(id)}'
         lmUserRole = self.__queryPatch(queryPath=path,queryData=payload,queryParams=None)
         return lmUserRole
+    
+    ## Update Resource Folder
+    def patch_device_group(self,id,payload: dict):
+        path = f'{self.base_url}/device/groups/{str(id)}'
+        lmDeviceGroup = self.__queryPatch(queryPath=path,queryData=payload,queryParams=None)
+        return lmDeviceGroup
 
     ## Raw Request - Currently old function
     def rest_raw(self, httpVerb: str, resourcePath: str, data: dict = None, queryParams: str = None):
