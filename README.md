@@ -50,5 +50,8 @@ for datasource in network_datasources:
     lm_devices_raw = lm_rest.get_devices(fields=[],filter='hostStatus:"dead"')
 ```
 # Basic Overview
-I disliked the way the SDK worked and I would use a more simple version of this daily for work. I decieded to make it more indepth for our use case. I have a alot of defaults built in that can be overriden. Most of those will be found in the fields option for most calls. An exmaple of this is when you use `get_device` it will default to the following fields to return `['id','customProperties','displayName','hostStatus','inheritedProperties','name','systemProperties']`. If you can't remember which properties it is you want, you simple change the call to `devices = lm_rest.get_device(deviceid, fields=[])`. When an empty list is pasted, it defaults to not sending the fields param so all fields are then returned.
+I disliked the way the SDK worked and I would use a more simple version of this daily for work. I decieded to make it more indepth for our use case. I have a alot of defaults built in that can be overriden. Most of those will be found in the fields option for most calls. An exmaple of this is when you use `get_device` it will default to the following fields to return `['id','customProperties','displayName','hostStatus','inheritedProperties','name','systemProperties']`.
+
+
+If you can't remember which properties it is you want, you simple change the call to `devices = lm_rest.get_device(deviceid, fields=[])`. When an empty list is pasted, it defaults to not sending the fields param so all fields are then returned.
 
