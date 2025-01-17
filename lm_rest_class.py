@@ -514,12 +514,20 @@ class LogicMonitorREST:
         path = f'{self.base_url}/setting/roles'
         lmUserRole = self.__queryPost(queryPath=path,queryData=payload,queryParams=None)
         return lmUserRole
+
     ## Undocumented appliesto functions call
     def get_functions(self, payload: dict):
         path = f'{self.base_url}/functions'
         lmFunctions = self.__queryPost(queryPath=path,queryData=payload,queryParams=None)
         return lmFunctions
-    
+
+    ## Instance Datafetch
+    def post_instance_datafetch(self, payload: dict, start_time: int, end_time: int, aggregate: str):
+        path = f'{self.base_url}/device/instances/datafetch'
+        queryString = f'start_time={start_time}&end_time={end_time}&aggregate={aggregate}'
+        lmInstanceDatafetch = self.__queryPost(queryPath=path,queryData=payload,queryParams=queryString)
+        return lmInstanceDatafetch
+
     # Patch Calls
     ## Update User Role
     def patch_user_role(self,id,payload: dict):
