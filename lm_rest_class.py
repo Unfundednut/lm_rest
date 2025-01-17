@@ -142,6 +142,7 @@ class LogicMonitorREST:
         return queryResponseItems
 
     # Get Calls
+
     ## Get User Accounts
     def get_users(self, fields: list = ['id','username','email'], filter: str = None, maxsize: int = None):
         path = f'{self.base_url}/setting/admins'
@@ -513,6 +514,11 @@ class LogicMonitorREST:
         path = f'{self.base_url}/setting/roles'
         lmUserRole = self.__queryPost(queryPath=path,queryData=payload,queryParams=None)
         return lmUserRole
+    ## Undocumented appliesto functions call
+    def get_functions(self, payload: dict):
+        path = f'{self.base_url}/functions'
+        lmFunctions = self.__queryPost(queryPath=path,queryData=payload,queryParams=None)
+        return lmFunctions
     
     # Patch Calls
     ## Update User Role
