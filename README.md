@@ -4,7 +4,7 @@ RESTful function for interacting with the LogicMonitor API.
 ## Setup
 Import the class and initlize it
 ```python
-from lm_rest_class import import LogicMonitorREST
+from lm_rest_class import LogicMonitorREST
 import os
 lm_cred_info = {
     'subdomain': os.getenv('PORTAL'),
