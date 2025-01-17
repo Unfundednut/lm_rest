@@ -341,6 +341,13 @@ class LogicMonitorREST:
         sizeLimit = 1000
         lmDatasource = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDatasource
+    
+    ## Get Datasource Devices
+    def get_datasource_devices(self, id, fields: list = ['id','displayName','hasActiveInstance','name','instance'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/setting/datasources/{str(id)}/devices'
+        sizeLimit = 1000
+        lmDatasourceDevices = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDatasourceDevices
 
     ## Get Devices
     def get_devices(self, fields: list =['id','customProperties','displayName','hostStatus','inheritedProperties','name','systemProperties'], filter: str = None, maxsize = None):
