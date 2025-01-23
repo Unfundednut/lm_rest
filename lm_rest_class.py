@@ -364,6 +364,28 @@ class LogicMonitorREST:
         lmDevice = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDevice
     
+    # Get Device Datasources
+    def get_device_datasources(self, id, fields: list =['id','deviceId','dataSourceName'], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/devices/{str(id)}/devicedatasources'
+        sizeLimit = 1000
+        lmDeviceDatasources = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceDatasources
+    
+    # Get Device Datasource Instances
+    def get_device_datasource_instances(self, id, datasourceid,fields: list = [], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/devices/{str(id)}/devicedatasources/{str(datasourceid)}/instances'
+        sizeLimit = 1000
+        lmDeviceDatasourceInstances = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceDatasourceInstances
+    
+    # Get Device Datasource Instance Config
+    def get_device_datasource_instance_config(self, id, datasourceid, instanceid,fields: list = [], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/devices/{str(id)}/devicedatasources/{str(datasourceid)}/instances/{str(instanceid)}/config'
+        sizeLimit = 1000
+        lmDeviceDatasourceInstanceConfig = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceDatasourceInstanceConfig
+
+
     ## Get Device Groups
     def get_device_groups(self, fields: list =['id','parentId','name','groupType','appliesTo','fullPath','numOfHosts','numOfDirectSubGroups','subGroups'], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups'
@@ -379,35 +401,35 @@ class LogicMonitorREST:
         return lmDeviceGroup
 
     ## Get Device Group Properties
-    def get_device_group_properties(self, id, fields: list =[], filter: str = None, maxsize = None):
+    def get_device_group_properties(self, id, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/properties'
         sizeLimit = 1000
         lmDeviceGroupProperties = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupProperties
 
     ## Get Device Group Property
-    def get_device_group_property(self, id, fieldname, fields: list =[], filter: str = None, maxsize = None):
+    def get_device_group_property(self, id, fieldname, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/properties/{fieldname}'
         sizeLimit = 1000
         lmDeviceGroupProperty = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupProperty
 
     ## Get Device Group Datasources
-    def get_device_group_datasources(self, id, fields: list =[], filter: str = None, maxsize = None):
+    def get_device_group_datasources(self, id, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/datasources'
         sizeLimit = 1000
         lmDeviceGroupDatasources = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupDatasources
 
     ## Get Device Group Datasource
-    def get_device_group_datasource(self, id, dsid, fields: list =[], filter: str = None, maxsize = None):
+    def get_device_group_datasource(self, id, dsid, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/datasources/{str(dsid)}'
         sizeLimit = 1000
         lmDeviceGroupDatasource = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceGroupDatasource
 
     ## GET Device Group SDTs
-    def get_device_group_sdts(self, id, fields: list =[], filter: str = None, maxsize = None):
+    def get_device_group_sdts(self, id, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/groups/{str(id)}/historysdts'
         sizeLimit = 1000
         lmDeviceGroupSDTs = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
@@ -421,7 +443,7 @@ class LogicMonitorREST:
         return lmDeviceGroupAlerts
 
     ## Get Report Groups
-    def get_report_groups(self, fields: list =[], filter: str = None, maxsize = None):
+    def get_report_groups(self, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/report/groups'
         sizeLimit = 1000
         lmReportGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
@@ -442,14 +464,14 @@ class LogicMonitorREST:
         return lmUserRole
     
     ## Get User Role Groups
-    def get_user_role_groups(self, fields: list =[], filter: str = None, maxsize = None):
+    def get_user_role_groups(self, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/role/groups'
         sizeLimit = 1000
         lmUserRoleGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmUserRoleGroups
     
     ## Get User Role Group
-    def get_user_role_group(self, id, fields: list =[], filter: str = None, maxsize = None):
+    def get_user_role_group(self, id, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/role/groups/{str(id)}'
         sizeLimit = 1000
         lmUserRoleGroup = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
@@ -470,7 +492,7 @@ class LogicMonitorREST:
         return lmNetscan
     
     ## Get Netscan Groups
-    def get_netscan_groups(self, fields: list =[], filter: str = None, maxsize = None):
+    def get_netscan_groups(self, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/netscans/groups'
         sizeLimit = 1000
         lmNetscanGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
