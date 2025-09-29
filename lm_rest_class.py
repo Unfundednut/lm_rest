@@ -69,41 +69,48 @@ class LogicMonitorREST:
         return returnList
 
     ## Generic get for all future gets
-    def __queryGet(self, queryPath, queryParams, sizeLimit, maxSize):
+    def __queryGet(self, queryPath, queryParams, sizeLimit, maxSize, noPagination = False):
         count = 0
         returnList = []
         if maxSize is not None and maxSize < sizeLimit:
             sizeLimit = maxSize
-        while True:
-            queryParamsPagination = f'?{queryParams}&offset={count}&size={sizeLimit}'
-            queryURL = f'{queryPath}{queryParamsPagination}'
+        if noPagination:
+            queryParams = f'?{queryParams}'
+            queryURL = f'{queryPath}{queryParams}'
             queryResponse = self.session.get(queryURL)
-            # Get Response Total, if the total field doesn't exist, assume a single item respoonse
-            queryResponseTotal = queryResponse.json().get('total', 'NoTotal')
-            if queryResponseTotal == 'NoTotal':
-                queryResponseItems = queryResponse.json()
-                return queryResponseItems
-            else:
-                queryResponseItems = queryResponse.json()['items']
-            queryResponseItemsSize = len(queryResponseItems)
-            # Alerts use negative totals
-            if queryResponseItemsSize > 0:
-                count += queryResponseItemsSize
-            else:
-                count += sizeLimit
-            returnList = returnList + queryResponseItems
-            if count >= queryResponseTotal and queryResponseTotal > 0:
-                return returnList
-            elif maxSize is not None and count >= maxSize:
-                return returnList
-            elif queryResponseTotal == 0:
-                return False
-            else:
-                queryResponseHeaders = queryResponse.headers
-                api_limit = int(queryResponseHeaders['x-rate-limit-limit'])
-                api_remaining = int(queryResponseHeaders['x-rate-limit-remaining'])
-                if api_remaining <= self.apiLimitBackoff:
-                    time.sleep(int(queryResponseHeaders['x-rate-limit-window']))
+            queryResponseItems = queryResponse.json()
+            return queryResponseItems
+        else:
+            while True:
+                queryParamsPagination = f'?{queryParams}&offset={count}&size={sizeLimit}'
+                queryURL = f'{queryPath}{queryParamsPagination}'
+                queryResponse = self.session.get(queryURL)
+                # Get Response Total, if the total field doesn't exist, assume a single item respoonse
+                queryResponseTotal = queryResponse.json().get('total', 'NoTotal')
+                if queryResponseTotal == 'NoTotal':
+                    queryResponseItems = queryResponse.json()
+                    return queryResponseItems
+                else:
+                    queryResponseItems = queryResponse.json()['items']
+                queryResponseItemsSize = len(queryResponseItems)
+                # Alerts use negative totals
+                if queryResponseItemsSize > 0:
+                    count += queryResponseItemsSize
+                else:
+                    count += sizeLimit
+                returnList = returnList + queryResponseItems
+                if count >= queryResponseTotal and queryResponseTotal > 0:
+                    return returnList
+                elif maxSize is not None and count >= maxSize:
+                    return returnList
+                elif queryResponseTotal == 0:
+                    return False
+                else:
+                    queryResponseHeaders = queryResponse.headers
+                    api_limit = int(queryResponseHeaders['x-rate-limit-limit'])
+                    api_remaining = int(queryResponseHeaders['x-rate-limit-remaining'])
+                    if api_remaining <= self.apiLimitBackoff:
+                        time.sleep(int(queryResponseHeaders['x-rate-limit-window']))
 
     ## Generic post for all future posts
     def __queryPost(self, queryPath, queryData, queryParams):
@@ -266,6 +273,14 @@ class LogicMonitorREST:
         lmCollector = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmCollector
 
+    ## Get Collector Debug Session
+    def get_collector_debug_session(self, collectorid, sessionid):
+        fields = None
+        filter = None
+        path = f'{self.base_url}/debug/{str(sessionid)}'
+        lmCollectorDebugSession = self.__queryGet(queryPath=path,queryParams="collectorId="+str(collectorid),sizeLimit=None,maxSize=None, noPagination=True)
+        return lmCollectorDebugSession
+
     ## Get Collector Versions
     def get_collector_versions(self, fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/setting/collector/collectors/versions'
@@ -381,7 +396,7 @@ class LogicMonitorREST:
     # Get Device Datasource Instance Config
     def get_device_datasource_instance_config(self, id, datasourceid, instanceid,fields: list = [], filter: str = None, maxsize = None):
         path = f'{self.base_url}/device/devices/{str(id)}/devicedatasources/{str(datasourceid)}/instances/{str(instanceid)}/config'
-        sizeLimit = 1000
+        sizeLimit = 50
         lmDeviceDatasourceInstanceConfig = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmDeviceDatasourceInstanceConfig
 
@@ -498,6 +513,13 @@ class LogicMonitorREST:
         lmNetscanGroups = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
         return lmNetscanGroups
 
+    ## Get Device Datasource Instance Alert Settings
+    def get_device_datasource_instance_alert_settings(self,deviceid,devicedatasourceid,instanceid,fields: list = [], filter: str = None, maxsize = None):
+        path = f'{self.base_url}/device/devices/{str(deviceid)}/devicedatasources/{str(devicedatasourceid)}/instances/{str(instanceid)}/alertsettings'
+        sizeLimit = 1000
+        lmDeviceDatasourceInstanceAlertSettings = self.__queryGet(queryPath=path,queryParams=self.__queryParams(queryFields=fields,queryFilter=filter),sizeLimit=sizeLimit,maxSize=maxsize)
+        return lmDeviceDatasourceInstanceAlertSettings
+
     # POST Calls
     ## Create Access Group Mapping | Default accessgroups to 1, the default access group in LM
     def post_access_groups_mapping(self, moduletype: str, moduleid: int, accessgroups: list = [1]):
@@ -550,6 +572,13 @@ class LogicMonitorREST:
         lmInstanceDatafetch = self.__queryPost(queryPath=path,queryData=payload,queryParams=queryString)
         return lmInstanceDatafetch
 
+    ## Execute Collector Debug Command
+    def post_collector_debug_command(self, collectorid, debugcommand):
+        path = f'{self.base_url}/debug'
+        payload = {"cmdline": debugcommand}
+        lmCollectorDebugCommand = self.__queryPost(queryPath=path,queryData=payload,queryParams="collectorId="+str(collectorid))
+        return lmCollectorDebugCommand
+
     # Patch Calls
     ## Update User Role
     def patch_user_role(self,id,payload: dict):
@@ -562,6 +591,12 @@ class LogicMonitorREST:
         path = f'{self.base_url}/device/groups/{str(id)}'
         lmDeviceGroup = self.__queryPatch(queryPath=path,queryData=payload,queryParams=None)
         return lmDeviceGroup
+    
+    ## Update Device Datasource Instance Threshold
+    def patch_device_datasource_instance_threshold(self,deviceid,devicedatasourceid,instanceid,alertid,payload: dict):
+        path = f'{self.base_url}/device/devices/{str(deviceid)}/devicedatasources/{str(devicedatasourceid)}/instances/{str(instanceid)}/alertsettings/{alertid}'
+        lmDeviceDatasourceInstanceThreshold = self.__queryPatch(queryPath=path,queryData=payload,queryParams=None)
+        return lmDeviceDatasourceInstanceThreshold
 
     # Delete Calls
     ## Delete Netscan
