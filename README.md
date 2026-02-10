@@ -37,8 +37,8 @@ Results in:
 
 ### Chain Results
 ```python
-network_team_accessgroup = lm_rest.get_access_groups(filter='name:"Network Team"')[0]['id']
-network_datasources = lm_rest.get_datasources(filter='name~"Network_"')
+network_team_accessgroup = lm_rest.get_access_groups(filter_expr='name:"Network Team"')[0]['id']
+network_datasources = lm_rest.get_datasources(filter_expr='name~"Network_"')
 for datasource in network_datasources:
     print(f"Updating {datasource['name']}")
     lm_rest.post_access_groups_mapping(moduletype="DATASOURCE",moduleid=datasource['id'],accessgroups=[network_team_accessgroup,1])
@@ -47,11 +47,38 @@ for datasource in network_datasources:
 ### Get all dead devices
 ```python
     lm_rest = LogicMonitorREST(lm_info={'subdomain': lm_info['subdomain'], 'bearer': lm_info['bearer_token']})
-    lm_devices_raw = lm_rest.get_devices(fields=[],filter='hostStatus:"dead"')
+    lm_devices_raw = lm_rest.get_devices(fields=[],filter_expr='hostStatus:"dead"')
 ```
 # Basic Overview
 I disliked the way the SDK worked and I would use a more simple version of this daily for work. I decieded to make it more indepth for our use case. I have a alot of defaults built in that can be overriden. Most of those will be found in the fields option for most calls. An exmaple of this is when you use `get_device` it will default to the following fields to return `['id','customProperties','displayName','hostStatus','inheritedProperties','name','systemProperties']`.
 
 
-If you can't remember which properties it is you want, you simple change the call to `devices = lm_rest.get_device(deviceid, fields=[])`. When an empty list is pasted, it defaults to not sending the fields param so all fields are then returned.
+If you can't remember which properties it is you want, you simply change the call to `devices = lm_rest.get_device(deviceid, fields=[])`. When an empty list is pasted, it defaults to not sending the fields param so all fields are then returned.
 
+## Module Layout
+The client is now split into a small package with domain mixins:
+- `lm_rest/client.py`: core session + request pipeline + `raw`
+- `lm_rest/default_fields.py`: centralized default fields
+- `lm_rest/mixins/`: endpoints grouped by domain (users, alerts, devices, etc.)
+
+Import remains the same:
+```python
+from lm_rest_class import LogicMonitorREST
+```
+Note: endpoint methods now use `filter_expr` instead of `filter` to avoid shadowing the built-in.
+
+## Generic Endpoint Access
+If an endpoint is not wrapped yet, use `raw`:
+```python
+lm_rest.raw("GET", "/setting/admins", queryParams="filter=name~\"test\"")
+```
+
+## Logging
+Enable basic logging to see request flow and rate-limit backoffs:
+```python
+import logging
+
+logging.basicConfig(level=logging.INFO)
+# For more detail:
+# logging.getLogger("lm_rest").setLevel(logging.DEBUG)
+```
